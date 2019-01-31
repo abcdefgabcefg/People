@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Persons.DAL;
 using Persons.Models;
 using System.Text.RegularExpressions;
+using PagedList;
 
 namespace Persons.Controllers
 {
@@ -17,7 +18,7 @@ namespace Persons.Controllers
         private PeopleContex db = new PeopleContex();
 
         // GET: People
-        public ActionResult Index(string search, string order) 
+        public ActionResult Index(string search, string order, int? page) 
         {
             var people = from p in db.People
                          select p;
@@ -30,29 +31,31 @@ namespace Persons.Controllers
                 ViewBag.Search = search;
             }
 
-            if (!string.IsNullOrEmpty(order))
+            int pageSize = 30;
+            if (page == null)
             {
-                people = Order(people, order);
-
-                ViewBag.Sort = order;
+                page = 1;
             }
 
+            people = Order(people, order);
+
+            ViewBag.Sort = order;
             ViewBag.NumberSort = string.IsNullOrEmpty(order) ? "number_desc" : string.Empty;
             ViewBag.FirstNameSort = order == "fName_asc" ? "fName_desc" : "fName_asc";
             ViewBag.LastNameSort = order == "lName_asc" ? "lName_desc" : "lName_asc";
 
             if (people.Count() > 0)
             {
-                ViewBag.Numbers = GetNumbers(people.ToList()); 
+                ViewBag.Numbers = GetNumbers(people.ToList()).ToPagedList(page.Value, pageSize);
             }
 
             ViewBag.Names = GetNames(db.People.ToList());
             ViewBag.Ids = GetIds(db.People.ToList());
 
-            return View(people.ToList());
+            return View(people.ToPagedList(page.Value, pageSize));
         }
 
-        private IQueryable<Person> Order(IQueryable<Person> people, string order)
+        private IQueryable<Person> Order(IEnumerable<Person> people, string order)
         {
             switch (order)
             {
@@ -71,9 +74,12 @@ namespace Persons.Controllers
                 case "lName_desc":
                     people = people.OrderByDescending(p => p.LastName);
                     break;
+                default:
+                    people = people.OrderBy(p => p.PersonId);
+                    break;
             }
 
-            return people;
+            return people.AsQueryable();
         }
 
         private IQueryable<Person> Search(IQueryable<Person> people, string search)

@@ -109,3 +109,7 @@ C:\Users\Саша\source\repos\Persons\Persons\obj\Debug\Persons.Migrations.AddF
 C:\Users\Саша\source\repos\Persons\Persons\obj\Debug\Persons.Migrations.FixMapping.resources
 C:\Users\Саша\source\repos\Persons\Persons\obj\Debug\Persons.Migrations.AddFullName.resources
 C:\Users\Саша\source\repos\Persons\Persons\obj\Debug\Persons.Migrations.AddIEqutableAndICompareble.resources
+C:\Users\Саша\source\repos\Persons\Persons\bin\PagedList.dll
+C:\Users\Саша\source\repos\Persons\Persons\bin\PagedList.Mvc.dll
+C:\Users\Саша\source\repos\Persons\Persons\bin\PagedList.xml
+C:\Users\Саша\source\repos\Persons\Persons\bin\PagedList.Mvc.xml

@@ -1,4 +1,6 @@
-﻿@model List<Persons.Models.Person>
+﻿@model PagedList.IPagedList<Persons.Models.Person>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet"/>
 
 @{
     ViewBag.Title = "People";
@@ -14,7 +16,7 @@
     </div>
 
     <div class="search-wrapper">
-        @using (Html.BeginForm("Index", "People", FormMethod.Post, new { @autocomplete = "off" }))
+        @using (Html.BeginForm("Index", "People", FormMethod.Get, new { @autocomplete = "off" }))
         {
             <p>
                 @Html.TextBox("search", null, new { @list = "names", @oninput = "doSearch()" })
@@ -95,13 +97,15 @@
             <td>@Html.DisplayFor(modelItem => Model[counter].LastName)</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = Model[counter].PersonId }) |
-                @Html.ActionLink("Details", "Details", new { id = Model[counter].PersonId }, new {@class="detals" }) |
+                @Html.ActionLink("Details", "Details", new { id = Model[counter].PersonId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = Model[counter].PersonId })
             </td>
         </tr>
     }
 
 </table>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, order = ViewBag.Sort, search = ViewBag.Search }))
 
 <script>
     

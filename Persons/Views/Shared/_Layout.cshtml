@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        body{
+            font-family: Montserrat, sans-serif;
+        }
+        .navbar-brand{
+            font-size: 3em;
+        }
+        .table-column-name, .arw {
+            color: #333;
+        }
+            .table-column-name:hover, .arw:hover {
+                text-decoration: none;
+                color: #333;
+            }
+        .arrow-hidden{
+            visibility: hidden;
+        } 
+        .arw{
+            font-size: 1.5em;
+        }
+        .title-wrapper, .search-wrapper{
+            float: left;
+        }
+        .search-wrapper{
+            width: 80%;
+            padding: 2.1% 0 0 4%;
+        }
+        .back-to-list{
+            display: block;
+            margin: 0 0 0 89%;
+        }
+        .search-wrapper p, .search-wrapper form, .search-wrapper input[type=text] {
+            width: 100%;
+        }
+        .search-wrapper input[type=text] {
+            max-width: none;
+            font-size: 1em;
+            border-radius: 10px;
+            border: 1px solid #888;
+            padding: 1%;
+            box-shadow: 4px 4px 8px #888;
+        }
+        .search-wrapper input[type=text]:focus{
+            outline: none;
+        }
+            .search-wrapper input[type=text]::-webkit-calendar-picker-indicator {
+                display: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("People", "Index", "People", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

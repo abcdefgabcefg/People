@@ -1,0 +1,162 @@
+﻿@model List<Persons.Models.Person>
+
+@{
+    ViewBag.Title = "People";
+}
+
+<div>
+    <div class="title-wrapper">
+        <h2>People</h2>
+
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+    </div>
+
+    <div class="search-wrapper">
+        @using (Html.BeginForm("Index", "People", FormMethod.Post, new { @autocomplete = "off" }))
+        {
+            <p>
+                @Html.TextBox("search", null, new { @list = "names", @oninput = "doSearch()" })
+            </p>
+        }
+
+        @if (ViewBag.IsSearch)
+        {
+            @Html.ActionLink("Back to List", "Index", "People", null, new { @class = "back-to-list" })
+        }
+
+        <datalist id="names">
+                @for (int index = 0; index < ViewBag.Names.Length; index++)
+                {
+                    <option class="element" value="@ViewBag.Names[index]" id="@ViewBag.Ids[index]"></option>
+                }
+        </datalist>
+        @Html.ActionLink("Some text", "Details", null, new { @id="clickDetail", @style="display:none;" })
+
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("#", "Index", new { search = ViewBag.Search, order = ViewBag.NumberSort }, new { @class = "table-column-name" })
+            @if (string.IsNullOrEmpty(ViewBag.Sort))
+            {
+                <a class="arw" href="@Url.Action("Index", new {search = ViewBag.Search, order = ViewBag.NumberSort })">&uarr;</a>
+            }
+            else if (ViewBag.Sort == "number_desc")
+            {
+                <a class="arw" href="@Url.Action("Index", new {search = ViewBag.Search, order = ViewBag.NumberSort })">&darr;</a>
+            }
+            else
+            {
+                <a class="arrow-hidden arw">&darr;</a>
+            }
+        </th>
+        <th>
+            @Html.ActionLink("First Name", "Index", new { search = ViewBag.Search, order = ViewBag.FirstNameSort }, new { @class = "table-column-name" })
+            @if (ViewBag.Sort == "fName_asc")
+            {
+                <a class="arw" href="@Url.Action("Index", new { search = ViewBag.Search, order = ViewBag.FirstNameSort })">&uarr;</a>
+            }
+            else if (ViewBag.Sort == "fName_desc")
+            {
+                <a class="arw" href="@Url.Action("Index", new {search = ViewBag.Search, order = ViewBag.FirstNameSort })">&darr;</a>
+            }
+            else
+            {
+                <a class="arrow-hidden arw">&darr;</a>
+            }
+        </th>
+        <th>
+            @Html.ActionLink("Last Name", "Index", new { search = ViewBag.Search, order = ViewBag.LastNameSort }, new { @class = "table-column-name" })
+            @if (ViewBag.Sort == "lName_asc")
+            {
+                <a class="arw" href="@Url.Action("Index", new {search = ViewBag.Search, order = ViewBag.LastNameSort })">&uarr;</a>
+            }
+            else if (ViewBag.Sort == "lName_desc")
+            {
+                <a class="arw" href="@Url.Action("Index", new {search = ViewBag.Search, order = ViewBag.LastNameSort })">&darr;</a>
+            }
+            else
+            {
+                <a class="arrow-hidden arw">&darr;</a>
+            }
+        </th>
+        <th></th>
+    </tr>
+
+    @for (int counter = 0; counter < Model.Count(); counter++)
+    {
+        <tr>
+            <td>@ViewBag.Numbers[counter]</td>
+            <td>@Html.DisplayFor(modelItem => Model[counter].FirstName)</td>
+            <td>@Html.DisplayFor(modelItem => Model[counter].LastName)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = Model[counter].PersonId }) |
+                @Html.ActionLink("Details", "Details", new { id = Model[counter].PersonId }, new {@class="detals" }) |
+                @Html.ActionLink("Delete", "Delete", new { id = Model[counter].PersonId })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script>
+    
+    var names = document.getElementsByClassName("element");
+
+    for (index = 0; index < names.length; index++) {
+        hideOptional(names[index]);
+    }
+    
+    function doSearch() {
+        var names = document.getElementsByClassName("element");
+        var searchString = document.getElementById("search").value.toLowerCase();
+        for (let index = 0; index < names.length; index++) {
+            if (searchString) {
+                if (names[index].value.toLowerCase().includes(searchString)) {
+                    names[index].removeAttribute("disabled");
+                    names[index].style.display = "block";
+                }
+                else {
+                    hideOptional(names[index]);
+                }
+            }
+            else {
+                hideOptional(names[index]);
+            }
+        }
+    }
+
+    function hideOptional(element) {
+        element.setAttribute('disabled', 'disabled');
+        element.style.display = "none";
+    }
+
+    function searchElement(value) {
+        for (var index = 0; index < names.length; index++) {
+            if (names[index].value == value) {
+                return names[index].id;
+            }
+        }
+    }
+
+    function changeLocation({ value }) {
+        if (value != '') {
+            id = searchElement(value);
+            if (typeof id != 'undefined') {
+                const location = document.getElementById("clickDetail").href + "/" + id;
+                window.location = location;
+            }
+        }
+    }
+
+    const searchInp = document.getElementById('search');
+
+    searchInp.addEventListener('change', ({ target }) => {
+        changeLocation(target);
+    })
+    
+</script>
